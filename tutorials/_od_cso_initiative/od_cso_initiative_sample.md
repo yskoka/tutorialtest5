@@ -6,6 +6,6 @@ tags:
 ---
 
 
-これはODのCloud Optimization Initiativeのページです
+これはODのCloud Optimization Initiativeのページです。削除予定です。
 
 ![](sample1.png)
