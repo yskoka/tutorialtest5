@@ -1944,7 +1944,7 @@ var store = [{
         "teaser": null
       },{
         "title": "これはODのCloud Optimization Initiativeのページです",
-        "excerpt":"これはODのCloud Optimization Initiativeのページです。削除予定です。     ","categories": [],
+        "excerpt":"これはODのCloud Optimization Initiativeのページです。削除予定です。 oka更新250804   ","categories": [],
         "tags": [],
         "url": "/ocitutorials/od_cso_initiative/od_cso_initiative_sample/",
         "teaser": null
