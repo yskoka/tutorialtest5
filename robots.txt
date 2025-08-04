@@ -1,1 +1,4 @@
-Sitemap: https://oracle-japan.github.io/ocitutorials/sitemap.xml
+User-agent: *
+Disallow: /tags/*
+
+Sitemap: https://yskoka.github.io/tutorialtest5/sitemap.xml
