@@ -1,0 +1,56 @@
+name: Delete Cloudflare Preview on PR close
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for PR metadata)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Delete Cloudflare Preview Deployment
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python <<EOF
+          import os, requests
+
+          headers = {
+              "Authorization": f"Bearer {os.environ['CF_API_TOKEN']}",
+              "Content-Type": "application/json"
+          }
+
+          list_url = f"https://api.cloudflare.com/client/v4/accounts/{os.environ['CF_ACCOUNT_ID']}/pages/projects/{os.environ['CF_PROJECT_NAME']}/deployments"
+          res = requests.get(list_url, headers=headers)
+          deployments = res.json().get("result", [])
+
+          pr_number = os.environ["PR_NUMBER"]
+          deleted = False
+
+          for dep in deployments:
+              if dep["environment"] == "preview":
+                  meta = dep.get("deployment_trigger", {}).get("metadata", {})
+                  pr_num = str(meta.get("pull_request_number", ""))
+                  if pr_num == pr_number:
+                      dep_id = dep["id"]
+                      del_url = f"{list_url}/{dep_id}"
+                      del_res = requests.delete(del_url, headers=headers)
+                      print(f"Deleted deployment {dep_id}: {del_res.status_code}")
+                      deleted = True
+          if not deleted:
+              print("No matching preview deployment found.")
+          EOF
