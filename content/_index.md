@@ -1,5 +1,5 @@
 ---
-title: Oracle Cloud Infrastructure チュートリアル tokunaga AutoPRチェック
+title: Oracle Cloud Infrastructure チュートリアル tokunaga AutoPR_Check
 geekdocNav: false
 geekdocAlign: left
 geekdocAnchor: false
